@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 class ApiService {
   static const String baseUrl = 'https://bobwallet.xpertbot.online';
@@ -21,12 +21,21 @@ class ApiService {
   }
 
   static String _getDeviceName() {
-    if (Platform.isAndroid) return 'Android';
-    if (Platform.isIOS) return 'iOS';
-    if (Platform.isMacOS) return 'macOS';
-    if (Platform.isWindows) return 'Windows';
-    if (Platform.isLinux) return 'Linux';
-    return 'Flutter App';
+    if (kIsWeb) return 'Web';
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return 'Android';
+      case TargetPlatform.iOS:
+        return 'iOS';
+      case TargetPlatform.macOS:
+        return 'macOS';
+      case TargetPlatform.windows:
+        return 'Windows';
+      case TargetPlatform.linux:
+        return 'Linux';
+      default:
+        return 'Flutter App';
+    }
   }
 
   // ============ Authentication ============
