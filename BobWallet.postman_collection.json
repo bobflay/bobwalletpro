@@ -1,0 +1,814 @@
+{
+	"info": {
+		"_postman_id": "bobwallet-api-collection",
+		"name": "BobWallet API",
+		"description": "Complete API collection for BobWallet - Personal Finance Management Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password\",\n    \"device_name\": \"Postman\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "login"]
+						},
+						"description": "Authenticate user and get Sanctum token. The token is automatically saved to collection variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "logout"]
+						},
+						"description": "Revoke the current access token"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user"]
+						},
+						"description": "Get the currently authenticated user"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for login, logout, and user info"
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "List All Wallets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/wallets",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets"]
+						},
+						"description": "Get all wallets for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Wallet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My Wallet\",\n    \"currency\": \"USD\",\n    \"balance\": 1000,\n    \"type\": \"bank\",\n    \"color\": \"#3B82F6\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/wallets",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets"]
+						},
+						"description": "Create a new wallet. Currency options: FCFA, USD, EUR. Type options: bank, cash, mobile, wise, investment, other."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Wallet",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Wallet Name\",\n    \"balance\": 1500\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/wallets/:wallet_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", ":wallet_id"],
+							"variable": [
+								{
+									"key": "wallet_id",
+									"value": "1",
+									"description": "Wallet ID"
+								}
+							]
+						},
+						"description": "Update an existing wallet"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Wallet",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/wallets/:wallet_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", ":wallet_id"],
+							"variable": [
+								{
+									"key": "wallet_id",
+									"value": "1",
+									"description": "Wallet ID"
+								}
+							]
+						},
+						"description": "Delete a wallet"
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Wallet Visibility",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/wallets/:wallet_id/toggle-visibility",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", ":wallet_id", "toggle-visibility"],
+							"variable": [
+								{
+									"key": "wallet_id",
+									"value": "1",
+									"description": "Wallet ID"
+								}
+							]
+						},
+						"description": "Toggle visibility for a specific wallet"
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle All Wallets Visibility",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hide\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/wallets/toggle-all-visibility",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", "toggle-all-visibility"]
+						},
+						"description": "Toggle visibility for all wallets. Set hide to true to hide all, false to show all."
+					},
+					"response": []
+				}
+			],
+			"description": "Wallet management endpoints"
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "List Wallet Transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/wallets/:wallet_id/transactions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", ":wallet_id", "transactions"],
+							"variable": [
+								{
+									"key": "wallet_id",
+									"value": "1",
+									"description": "Wallet ID"
+								}
+							]
+						},
+						"description": "Get all transactions for a specific wallet"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"credit\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"notes\": \"Salary payment\",\n    \"transaction_date\": \"2024-01-15\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/wallets/:wallet_id/transactions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", ":wallet_id", "transactions"],
+							"variable": [
+								{
+									"key": "wallet_id",
+									"value": "1",
+									"description": "Wallet ID"
+								}
+							]
+						},
+						"description": "Create a new transaction. Type options: credit, debit. Currency options: FCFA, USD, EUR."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Transaction",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/wallets/:wallet_id/transactions/:transaction_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "wallets", ":wallet_id", "transactions", ":transaction_id"],
+							"variable": [
+								{
+									"key": "wallet_id",
+									"value": "1",
+									"description": "Wallet ID"
+								},
+								{
+									"key": "transaction_id",
+									"value": "1",
+									"description": "Transaction ID"
+								}
+							]
+						},
+						"description": "Delete a transaction and reverse its impact on wallet balance"
+					},
+					"response": []
+				}
+			],
+			"description": "Transaction management endpoints (nested under wallets)"
+		},
+		{
+			"name": "Income",
+			"item": [
+				{
+					"name": "List All Income",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/income",
+							"host": ["{{base_url}}"],
+							"path": ["api", "income"]
+						},
+						"description": "Get all income entries for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Income",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Monthly Salary\",\n    \"amount\": 5000,\n    \"currency\": \"USD\",\n    \"frequency\": \"monthly\",\n    \"type\": \"fixed\",\n    \"notes\": \"Main job salary\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/income",
+							"host": ["{{base_url}}"],
+							"path": ["api", "income"]
+						},
+						"description": "Create a new income entry. Frequency options: monthly, bimonthly, quarterly, weekly, biweekly, semiannual, annual, one-time. Type options: fixed, potential."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Income",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 5500,\n    \"notes\": \"Updated salary after raise\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/income/:income_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "income", ":income_id"],
+							"variable": [
+								{
+									"key": "income_id",
+									"value": "1",
+									"description": "Income ID"
+								}
+							]
+						},
+						"description": "Update an existing income entry"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Income",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/income/:income_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "income", ":income_id"],
+							"variable": [
+								{
+									"key": "income_id",
+									"value": "1",
+									"description": "Income ID"
+								}
+							]
+						},
+						"description": "Delete an income entry"
+					},
+					"response": []
+				}
+			],
+			"description": "Income management endpoints"
+		},
+		{
+			"name": "Expenses",
+			"item": [
+				{
+					"name": "List All Expenses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": ["{{base_url}}"],
+							"path": ["api", "expenses"]
+						},
+						"description": "Get all expense entries for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Expense",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Rent Payment\",\n    \"amount\": 1200,\n    \"currency\": \"USD\",\n    \"frequency\": \"monthly\",\n    \"category\": \"housing\",\n    \"is_recurring\": true,\n    \"notes\": \"Monthly apartment rent\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": ["{{base_url}}"],
+							"path": ["api", "expenses"]
+						},
+						"description": "Create a new expense entry. Category options: housing, family, utilities, transport, healthcare, food, financial, other. Frequency options: monthly, bimonthly, quarterly, weekly, biweekly, semiannual, annual, one-time."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Expense",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 1300,\n    \"notes\": \"Updated rent amount\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/:expense_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "expenses", ":expense_id"],
+							"variable": [
+								{
+									"key": "expense_id",
+									"value": "1",
+									"description": "Expense ID"
+								}
+							]
+						},
+						"description": "Update an existing expense entry"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Expense",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/expenses/:expense_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "expenses", ":expense_id"],
+							"variable": [
+								{
+									"key": "expense_id",
+									"value": "1",
+									"description": "Expense ID"
+								}
+							]
+						},
+						"description": "Delete an expense entry"
+					},
+					"response": []
+				}
+			],
+			"description": "Expense management endpoints"
+		},
+		{
+			"name": "Assets",
+			"item": [
+				{
+					"name": "List All Assets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/assets",
+							"host": ["{{base_url}}"],
+							"path": ["api", "assets"]
+						},
+						"description": "Get all assets for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Asset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Gold Investment\",\n    \"type\": \"gold\",\n    \"value\": 5000,\n    \"currency\": \"USD\",\n    \"quantity\": 2.5,\n    \"notes\": \"Gold bars purchased in 2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/assets",
+							"host": ["{{base_url}}"],
+							"path": ["api", "assets"]
+						},
+						"description": "Create a new asset. Type options: property, gold, commodity, other."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Asset",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"value\": 5500,\n    \"notes\": \"Updated value based on current market\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/assets/:asset_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "assets", ":asset_id"],
+							"variable": [
+								{
+									"key": "asset_id",
+									"value": "1",
+									"description": "Asset ID"
+								}
+							]
+						},
+						"description": "Update an existing asset"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Asset",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/assets/:asset_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "assets", ":asset_id"],
+							"variable": [
+								{
+									"key": "asset_id",
+									"value": "1",
+									"description": "Asset ID"
+								}
+							]
+						},
+						"description": "Delete an asset"
+					},
+					"response": []
+				}
+			],
+			"description": "Asset management endpoints"
+		},
+		{
+			"name": "Settings",
+			"item": [
+				{
+					"name": "Get Settings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings"]
+						},
+						"description": "Get all settings including exchange rates"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Settings",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usdToFcfa\": 600,\n    \"eurToFcfa\": 655,\n    \"usdToEur\": 0.92,\n    \"goldPricePerOunce\": 2000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings"]
+						},
+						"description": "Update settings including exchange rates and gold price"
+					},
+					"response": []
+				}
+			],
+			"description": "Application settings endpoints"
+		},
+		{
+			"name": "Utilities",
+			"item": [
+				{
+					"name": "Seed Default Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/seed",
+							"host": ["{{base_url}}"],
+							"path": ["api", "seed"]
+						},
+						"description": "Populate database with default income and expense data. Only works if no income or expenses exist."
+					},
+					"response": []
+				},
+				{
+					"name": "AI Financial Analysis",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/ai/analyze",
+							"host": ["{{base_url}}"],
+							"path": ["api", "ai", "analyze"]
+						},
+						"description": "Get AI-powered financial analysis using Claude. Requires ANTHROPIC_API_KEY to be configured."
+					},
+					"response": []
+				}
+			],
+			"description": "Utility endpoints for seeding data and AI analysis"
+		}
+	]
+}
