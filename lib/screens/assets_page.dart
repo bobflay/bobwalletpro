@@ -248,7 +248,7 @@ class _AssetsPageState extends State<AssetsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '${asset.value.toStringAsFixed(2)} ${asset.currency}',
+                                  '${asset.value % 1 == 0 ? asset.value.toInt().toString() : asset.value.toStringAsFixed(2)} ${asset.currency}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.amber,

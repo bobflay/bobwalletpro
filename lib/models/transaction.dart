@@ -6,6 +6,7 @@ class Transaction {
   final String currency;
   final String? notes;
   final DateTime transactionDate;
+  final DateTime? createdAt;
 
   Transaction({
     required this.id,
@@ -15,6 +16,7 @@ class Transaction {
     required this.currency,
     this.notes,
     required this.transactionDate,
+    this.createdAt,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Transaction {
       currency: json['currency'],
       notes: json['notes'],
       transactionDate: DateTime.parse(json['transaction_date']),
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
     );
   }
 

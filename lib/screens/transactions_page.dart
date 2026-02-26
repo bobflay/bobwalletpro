@@ -228,7 +228,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               ),
                             ),
                             title: Text(
-                              '${isCredit ? '+' : '-'}${tx.amount.toStringAsFixed(2)} ${tx.currency}',
+                              '${isCredit ? '+' : '-'}${tx.amount % 1 == 0 ? tx.amount.toInt().toString() : tx.amount.toStringAsFixed(2)} ${tx.currency}',
                               style: TextStyle(
                                 color: isCredit ? Colors.green : Colors.red,
                                 fontWeight: FontWeight.bold,

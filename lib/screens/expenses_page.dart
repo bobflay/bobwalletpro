@@ -271,7 +271,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '${expense.amount.toStringAsFixed(2)} ${expense.currency}',
+                                  '${expense.amount % 1 == 0 ? expense.amount.toInt().toString() : expense.amount.toStringAsFixed(2)} ${expense.currency}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.red,

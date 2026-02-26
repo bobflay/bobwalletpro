@@ -243,7 +243,7 @@ class _IncomePageState extends State<IncomePage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '${income.amount.toStringAsFixed(2)} ${income.currency}',
+                                  '${income.amount % 1 == 0 ? income.amount.toInt().toString() : income.amount.toStringAsFixed(2)} ${income.currency}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green,
